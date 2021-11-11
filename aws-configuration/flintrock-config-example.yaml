@@ -1,0 +1,28 @@
+services:
+  spark:
+    version: 2.4.3
+    download-source: "https://archive.apache.org/dist/spark/spark-{v}/spark-{v}-bin-hadoop2.7.tgz"
+
+provider: ec2
+
+providers:
+  ec2:
+    key-name: aws-bda-project # key pair name in aws
+    identity-file: "/path/to/private_key.pem"
+    instance-type: t2.micro # Choose EC2 flavor
+    region: us-east-1
+    ami: ami-0b8d0d6ac70e5750c # Amazon Linux 2, us-east-1
+    user: ec2-user
+    vpc-id: vpc-dc7caea6 # your VPC id
+    subnet-id: subnet-42fe2b7c # one of your subnet id
+    security-groups:
+      - only-ssh-from-anywhere # security-group name that allow ssh (22) from anywhere (0.0.0.0/0)
+    instance-profile-name: Spark_S3 # IAM Role with AmazonS3FullAccess policy
+    tenancy: default
+    ebs-optimized: no
+    instance-initiated-shutdown-behavior: terminate
+
+launch:
+  num-slaves: 3 # Choose number of slaves
+
+debug: false
